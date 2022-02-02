@@ -4,12 +4,16 @@ const app = express();
 
 const mongoose = require("mongoose");
 
-const Thing = require("./models/thing");
+const Sauces = require("./models/Sauces");
 
 const stuffRoutes = require('./routes/stuff');
 
 const userRoutes = require('./routes/user');
 
+const path = require('path');
+
+
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/stuff', stuffRoutes);
 app.use('/api/auth', userRoutes);
 
@@ -31,7 +35,7 @@ app.post("/api/stuff", (req, res, next) => {
   const thing = new Thing({
     ...req.body,
   });
-  thing
+  Sauces
     .save()
     .then(() => res.status(201).json({ message: "Objet enregistré !" }))
     .catch((error) => res.status(400).json({ error }));
