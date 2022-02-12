@@ -24,6 +24,9 @@ exports.modifySauce = (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
 };
 
+
+//on réimplémente createSauce en important notre contrôlleur
+//et en enregistrant createSauce
 exports.createSauce = (req, res, next) => {
   const sauce = new Sauce({
     title: req.body.title,
