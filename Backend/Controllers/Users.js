@@ -2,6 +2,9 @@ const bcrypt = require('bcrypt');
 
 const User = require('../Models/User');
 
+// on importe le package jswt pour pouvoir créer et vérif 
+// les tokens d'authentification
+// on l'importe dans le contrôleur utilisateur 
 const jwt = require('jsonwebtoken');
 
 // la méthode HASH de bcrypt crée un hash crypté de mdp 
@@ -34,6 +37,8 @@ exports.signup = (req, res, next) => {
       .catch(error => res.status(500).json({ error }));
   };
 
+  
+
   exports.login = (req, res, next) => {
     User.findOne({ email: req.body.email })
       .then(user => {
@@ -47,9 +52,13 @@ exports.signup = (req, res, next) => {
             }
             res.status(200).json({
               userId: user._id,
+              // on utlisie la f° SIGN de jswt pour encoder un nv token
+              // ce token contient l'ID de l'utilisateur
               token: jwt.sign(
                 { userId: user._id },
+                // on utlise la chaîne secrète de dévt temporaire
                 'RANDOM_TOKEN_SECRET',
+                // durée de validité du token à 24h
                 { expiresIn: '24h' }
               )
             });
