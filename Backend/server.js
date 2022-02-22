@@ -1,6 +1,9 @@
+//on importe le package HTTP et on l'utilise pour créer un serveur
 const http = require('http');
 const app = require('./app');
 
+
+// normalizePort renvoie un port valide
 const normalizePort = val => {
   const port = parseInt(val, 10);
 

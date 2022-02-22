@@ -20,7 +20,7 @@ const path = require('path');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
 // on implémente CORS pour assurer que le front puisse effectuer 
-//des appels vers l'API en toute sécurité
+// des appels vers l'API en toute sécurité
 app.use(cors());
 
 // ajoute le gestionnaire de routage 
@@ -48,17 +48,19 @@ mongoose
 
 
 // les setHeader servent à :
-// accéder à notre API depuis n'importe quelle origine '*'
-// ajouter les headers "Access-Control ect.." aux requ^tes envoyées vers notre API
-// envoyer des req avec les méthodes mentionnées (GET, POST, ect)
+
 app.use((req, res, next) => {
+  
+  // accéder à notre API depuis n'importe quelle origine '*'
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
+    // ajouter les headers "Access-Control ect.." aux requ^tes envoyées vers notre API
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
   );
   res.setHeader(
     "Access-Control-Allow-Methods",
+    // envoyer des req avec les méthodes mentionnées (GET, POST, ect)
     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
   );
   next();
