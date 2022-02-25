@@ -3,8 +3,9 @@
 
 
 const jwt = require('jsonwebtoken');
-
-
+//--------------------------------------------------------------------------------------------------------------------------------------------------
+// le middleware qui protégera les routes sélectionnées et vérifiera que l'utilisateur est authentifié avant d'autoriser l'envoi de ses requêtes.
+//--------------------------------------------------------------------------------------------------------------------------------------------------
 // on insère à 'intérieur try catch vu que de nbeux pb peuvent se produire
 module.exports = (req, res, next) => {
   try {

@@ -132,7 +132,7 @@ exports.likeSauce = (req, res, next) => {
         .then(() => res.status(200).json({ message: "Objet modifié !" }))
         .catch((error) => res.status(400).json({ error }));
     } else if (
-      req.body.likes - 1 &&
+      req.body.like == - 1 &&
       !sauce.usersDisliked.includes(req.body.userId)
     ) {
       Sauce.updateOne(
