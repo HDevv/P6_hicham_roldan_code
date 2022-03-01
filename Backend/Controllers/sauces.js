@@ -10,7 +10,7 @@ exports.createSauce = (req, res, next) => {
   // on l'analyse donc avec JSON.parse pour obtenir un objet utilisable
 
   const sauceObject = JSON.parse(req.body.sauce);
-  delete sauceObject._id;
+  //delete sauceObject._id;
   const sauce = new Sauce({
     ...sauceObject,
 
@@ -38,6 +38,7 @@ exports.modifySauce = (req, res, next) => {
   const sauceObject = req.file
     ? {
         ...JSON.parse(req.body.sauce),
+   
         imageUrl: `${req.protocol}://${req.get("host")}/images/${
           req.file.filename
         }`,
@@ -48,11 +49,12 @@ exports.modifySauce = (req, res, next) => {
   // 1 arg = comment trohver l'objet
   // 2 dictionnairs
   Sauce.updateOne(
-    { _id: req.params.id },
+    { _id: req.params.id, userId : res.locals.userId }, 
     { ...sauceObject, _id: req.params.id }
   )
     .then(() => res.status(200).json({ message: "Objet modifié !" }))
-    .catch((error) => res.status(400).json({ error }));
+    .catch((error) => res.status(400).json({ error 
+    }));
 };
 
 //_________________________________________________________________________________________________________________________
@@ -66,6 +68,22 @@ exports.deleteSauce = (req, res, next) => {
   // on utilise l'id qu'on reçoit comme param pour accéder à la Sauce correspondante dans la b. de données
   Sauce.findOne({ _id: req.params.id })
     .then((Sauces) => {
+
+    //pb de sécu à la supression
+      if (!Sauces) {
+        res.status(404).json({ error: new Error('Sauce inexistante !')});
+      }
+
+      // comparer userID de la sauce
+      if (Sauces.userId !== res.locals.userId) {
+        res.status(401).json({ error: new Error('Requête non autorisée !')});
+      }
+      return Sauces;
+    
+    })
+    .then(Sauces => {
+
+
       // on utilise le fait de savoir que notre URL d'image contient un segment
       // /images/ pour séparer le nom de fichier
       const filename = Sauces.imageUrl.split("/images/")[1];
@@ -78,8 +96,9 @@ exports.deleteSauce = (req, res, next) => {
           .then(() => res.status(200).json({ message: "Objet supprimé !" }))
           .catch((error) => res.status(400).json({ error }));
       });
-    })
-    .catch((error) => res.status(500).json({ error }));
+     })
+    .catch(error => res.status(500).json({ error }));
+
 };
 
 //_________________________________________________________________________________________________________________________
